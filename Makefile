@@ -1,4 +1,4 @@
-MSG?= default commit message from
+MSG?= default commit message
 BRANCH?="master"
 pull:
 	git pull
