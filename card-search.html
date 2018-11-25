@@ -43,11 +43,29 @@
   <body>
 
     <ul>
-      <li><a href="#home">Deck Builder</a></li>
+      <li><a href="raw-scheme.html">schema</a></li>
       <li><a href="card-search.html">Card Search</a></li>
     </ul>
+    <p id="demo">la carta verrà scritta qui</p>
 
-    
+
+    carta: <input type="text" id="name">
+    <button type="button" onclick="loadDoc()">cerca carta</button>
+
+
+    <script>
+      function loadDoc() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("demo").innerHTML = this.responseText;
+      }
+      };
+      xhttp.open("GET", "https://db.ygoprodeck.com/api/cardinfo.php?name="+document.getElementById("name").value, true);
+      alert(document.getElementById("name").value);
+      xhttp.send();
+      }
+    </script>
 
   </body>
 </html>

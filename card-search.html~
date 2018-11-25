@@ -43,7 +43,7 @@
   <body>
 
     <ul>
-      <li><a href="#home">Deck Builder</a></li>
+      <li><a href="raw-scheme.html">schema</a></li>
       <li><a href="card-search.html">Card Search</a></li>
     </ul>
 
