@@ -1,6 +1,6 @@
 # CardGamesProject
 
-#### comandi git terminale: 
+# comandi git terminale: 
 
 git add -A
 
@@ -8,19 +8,16 @@ git commint -m "messaggio allegato"
 
 git push origin "nome della branca"
 
-#### comandi git: makefile
+# comandi git: makefile
 
 
 make pull -> git pull
 
 
-variabili push:
-MSG = messaggio commit
-(default="USER default commit message")
-NB: usa il nome user in automatico
-
-BRANCH = branch della push
-(default= "master)
+variabili push:  
+MSG = messaggio commit (default="USER default commit message") 
+NB: usa il nome user in automatico  
+BRANCH = branch della push (default= "master)
 
 make epushall ->
      cancella file temporanei che
