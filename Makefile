@@ -1,6 +1,9 @@
+MSG?="default commit message"
+BRANCH?="master"
 pull:
 	git pull
 pushall:
-	git add -A -n *~
-	git commit -m "commit di paolo"
-	git push origin "PaoloBranch"
+	rm -f *~
+	git add -A
+	git commit -m $(MSG)
+	git push origin $(BRANCH)
