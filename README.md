@@ -16,7 +16,9 @@ make pull -> git pull
 
 variabili push:
 MSG = messaggio commit
-(default="default commit message")
+(default="USER default commit message")
+NB: usa il nome user in automatico
+
 
 BRANCH = branch della push
 (default= "master)

@@ -1,15 +1,16 @@
-MSG?="default commit message"
+MSG?= default commit message from
 BRANCH?="master"
 pull:
 	git pull
 
 pushall:
 	git add -A
-	git commit -m $(MSG)
+	git commit -m "$(USER) $(MSG)"
 	git push origin $(BRANCH)
 
 epushall:
 	rm -f *~
 	git add -A
-	git commit -m $(MSG)
+	git commit -m "$(USER) $(MSG)"
 	git push origin $(BRANCH)
+
