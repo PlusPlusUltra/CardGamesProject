@@ -52,6 +52,7 @@
     carta: <input type="text" id="name">
     <button type="button" onclick="loadDoc()">cerca carta</button>
     <button type = "button" onclick="addCard()">add to deck</button>
+    <button type = "button" onclick="removeLastCard()">remove</button>
     <p id="card">card will appear here: black magic :)</p>
     <br>
     deck: 
@@ -94,15 +95,23 @@
       }
       
 			var cards = [];
-			function addCard(){
-				cards.push(lastCard);
+			function refreshDeck(){
 				var txt = "<table border='1'>";
 				for(i=0; i< cards.length; i++){
-					txt = txt + "<tr><td>"+ cards[i].name+"</td></tr>"
+					txt = txt + "<tr><td>"+ cards[i].name+"</td></tr>";
 				}
 				txt = txt + "</table>";
 				document.getElementById("list").innerHTML = txt;
 			}
+			function addCard(){
+				cards.push(lastCard);
+				refreshDeck();
+			}
+			function removeLastCard(){
+				cards.pop();
+				refreshDeck();
+			}
+		
     </script>
 
   </body>
