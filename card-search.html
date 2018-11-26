@@ -45,16 +45,22 @@
     <ul>
       <li><a href="raw-scheme.html">schema</a></li>
       <li><a href="card-search.html">Card Search</a></li>
+      <li><a href="sampleBuilder.html">Deck Builder</a></a></li>
     </ul>
 
 
     carta: <input type="text" id="name">
     <button type="button" onclick="loadDoc()">cerca carta</button>
+    <button type = "button" onclick="addCard()">add to deck</button>
     <p id="card">card will appear here: black magic :)</p>
+    <br>
+    deck: 
+		<p id="list"></p>
     
 
 
     <script>
+		var lastCard;
       function loadDoc() {
       
       var xhttp = new XMLHttpRequest();
@@ -65,13 +71,15 @@
       if(this.responseText.indexOf("No card matching your query was found in the database") == -1){
       
       var myObj = JSON.parse(this.responseText)[0];
+      lastCard = myObj;
 
       
-      txt="<table border='1'>"+
+      txt= "<img src = 'https://ygoprodeck.com/pics/"+myObj.id + ".jpg' > <br><table border='1'>"+ 
 	"<tr><td>name</td><td>"+myObj.name+"</td></tr>"+
 	"<tr><td>card type</td><td>"+myObj.type+"</td></tr>"+
 	"<tr><td>text</td><td>"+myObj.desc+ "</td></tr>"+
-	"<tr><td>archetype</td><td>"+myObj.archetype+"</td></tr>"+	
+	"<tr><td>archetype</td><td>"+myObj.archetype+"</td></tr>"+
+	
       "</table>";
 
       
@@ -84,6 +92,17 @@
       xhttp.open("GET", "https://db.ygoprodeck.com/api/cardinfo.php?name="+document.getElementById("name").value, true);
       xhttp.send();
       }
+      
+			var cards = [];
+			function addCard(){
+				cards.push(lastCard);
+				var txt = "<table border='1'>";
+				for(i=0; i< cards.length; i++){
+					txt = txt + "<tr><td>"+ cards[i].name+"</td></tr>"
+				}
+				txt = txt + "</table>";
+				document.getElementById("list").innerHTML = txt;
+			}
     </script>
 
   </body>

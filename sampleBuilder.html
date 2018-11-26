@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		
+		deck: 
+		<p id="list"></p>
+		<script>
+			var lastCard;
+			var cards = [];
+			function addCard(){
+				cards.push(lastCard);
+				var txt = "<table border='1'>";
+				for(i=0; i< cards.length; i++){
+					txt = txt + "<tr>"+ cards[i].name+"</tr>"
+				}
+				txt = txt + "</table>";
+				document.getElementById("list").innerHTML = txt;
+			}
+		</script>
+	</body>
