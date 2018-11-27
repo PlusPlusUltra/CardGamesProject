@@ -57,6 +57,7 @@
     <br>
     deck: 
 		<p id="list"></p>
+	<p id= "msg" </p>
     
 
 
@@ -93,25 +94,49 @@
       xhttp.open("GET", "https://db.ygoprodeck.com/api/cardinfo.php?name="+document.getElementById("name").value, true);
       xhttp.send();
       }
-      
+      //deckbuilder code
 			var cards = [];
 			function refreshDeck(){
 				var txt = "<table border='1'>";
 				for(i=0; i< cards.length; i++){
-					txt = txt + "<tr><td>"+ cards[i].name+"</td></tr>";
+					txt = txt + "<tr><td>"+ cards[i].name+"</td> " +
+					" <td><button type='button' onclick ='removeNumber(" + i + ")' id ='N" +
+					i + "'>X</button></td></tr>";
 				}
 				txt = txt + "</table>";
 				document.getElementById("list").innerHTML = txt;
 			}
 			function addCard(){
-				cards.push(lastCard);
-				refreshDeck();
+				if(checkDuplicates())
+				{
+					document.getElementById("msg").innerHTML = "";
+					if (cards.length == 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
+					cards.push(lastCard);
+					refreshDeck();
+					
+				}
+				else //insert error message
+				{
+					document.getElementById("msg").innerHTML = "too many copies of that card";
+				}
 			}
 			function removeLastCard(){
 				cards.pop();
 				refreshDeck();
 			}
-		
+			function removeNumber(n)
+			{
+				cards.splice(n,1);
+				refreshDeck();
+			}
+			function checkDuplicates(){ //checks if there are 3 copies of a card already
+				var count = 0;
+				for(i = 0; i< cards.length; i++){
+					if (cards[i].name == lastCard.name) count ++;
+				}
+				if (count < 3) return true;
+				else return false;//can be modified to check banned or limited cards as well
+			}
     </script>
 
   </body>
