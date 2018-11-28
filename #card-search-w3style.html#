@@ -1,81 +1,35 @@
 <!DOCTYPE html>
 <html>
-    <head>
-	<style>
-	 body {
-	     background-color: blue;
-	 }
-	 
-	 ul {
-	     list-style-type: none;
-	     margin: 0;
-	     padding: 0;
-	     background-color: blue;
-	     overflow: hidden;
-	 }
-	 
-	 li {
-	     float: left;
-	 }
-
-	 li a {
-	     display: block;
-	     color: black;
-	     padding: 16px 32px;
-	     text-decoration: none;
-	     text-align: center;
-	     border-right: 2px solid lightblue;
-	 }
-	 li p{
-	     padding: 16px 32px;
-	     display: block;
-	     background-color: lightblue;
-	 }
-	 
-	 li a:hover {
-	     background-color: lightblue;
-	     color: white;
-	 }
-
-	 table{
-	     border-collapse: collapse;
-	     width: 100%
-	 }
-
-	 table,th,tr,td{
-	     border: 2px solid black;
-	     vertical-align: top;
-	     
-	 }
-	 td{
-	     paddind: 5px;
-	     width: 300px;
-	 }
-	</style>
-    </head>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <body>
 
-	<ul>
-	    <li><a href="raw-scheme.html">schema</a></li>
-	    <li><a href="card-search.html">Card Search</a></li>
-	    <li><a href="sampleBuilder.html">Deck Builder</a></li>
-	</ul>
+	<!-- top seach bar  -->
+	<div class="w3-top">
+	    <div class="w3-bar w3-orange w3-left-align w3-large">
+		<a class="w3-bar-item w3-button w3-hover-brown" href="raw-scheme.html">schema</a>
+		<a class="w3-bar-item w3-button w3-hover-brown" href="card-search.html">Card Search</a>
+		<a class="w3-bar-item w3-button w3-hover-brown" href="sampleBuilder.html">Deck Builder</a>
+		<input class="ui-autocomplete-input" autocomplete="off" type="text" id="name" onclick="this.select()"  onKeyDown="if(event.keyCode==13) loadDoc();">
+	    </div>
+	</div>
 
-	
-	card: <input type="text" id="name" onclick="this.select()"  onKeyDown="if(event.keyCode==13) loadDoc();" >
-	<button type="button" onclick="loadDoc()">Search</button>
-	<button type = "button" onclick="addCard()">Add to deck</button>
-	<button type = "button" onclick="removeLastCard()">Remove last</button>
-	
-	
-	<ul>
-	    <li><p id="card-img">card image</p></li>
-	    <li><p id="card-desc">card description tab</p></li>
-	    <li><p id="list">deck</p></li>
-	    <li><p id= "msg">other fancy messages</p></li>
+
+	<!-- centered element in the page  -->
+	<div>
+	    card: 
+	    <button type="button" onclick="loadDoc()">Search</button>
+	    <button type = "button" onclick="addCard()">Add to deck</button>
+	    <button type = "button" onclick="removeLastCard()">Remove last</button>
 	    
-	</ul>
-
+	    
+	    <ul>
+		<li><p id="card-img">card image</p></li>
+		<li><p id="card-desc">card description tab</p></li>
+		<li><p id="list">deck</p></li>
+		<li><p id= "msg">other fancy messages</p></li>
+		
+	    </ul>
+	</div>
 
 	<script>
 	 function loadDoc() {
