@@ -1,143 +1,143 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <style>
-      body {
-      background-color: lightblue;
-      }
-      
-      ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      background-color: #0000dd;
-      overflow: hidden;
-      }
-      
-      li {
-      float: left;
-      border-right: 2px solid #000;
-      }
+    <head>
+	<style>
+	 body {
+	     background-color: lightblue;
+	 }
+	 
+	 ul {
+	     list-style-type: none;
+	     margin: 0;
+	     padding: 0;
+	     background-color: #0000dd;
+	     overflow: hidden;
+	 }
+	 
+	 li {
+	     float: left;
+	     border-right: 2px solid #000;
+	 }
 
-      li a {
-      display: block;
-      color: #000;
-      padding: 16px 32px;
-      text-decoration: none;
-      text-align: center;
-      }
-      
-      li a:hover {
-      background-color: #aa0055;
-      color: white;
-      }
+	 li a {
+	     display: block;
+	     color: #000;
+	     padding: 16px 32px;
+	     text-decoration: none;
+	     text-align: center;
+	 }
+	 
+	 li a:hover {
+	     background-color: #aa0055;
+	     color: white;
+	 }
 
-      h1{
-      text-align: center;
-      size: 300%;
-      color: blue;
-      
-      }
-    </style>
-  </head>
-  <body>
+	 h1{
+	     text-align: center;
+	     size: 300%;
+	     color: blue;
+	     
+	 }
+	</style>
+    </head>
+    <body>
 
-    <ul>
-      <li><a href="raw-scheme.html">schema</a></li>
-      <li><a href="card-search.html">Card Search</a></li>
-      <li><a href="sampleBuilder.html">Deck Builder</a></a></li>
-    </ul>
+	<ul>
+	    <li><a href="raw-scheme.html">schema</a></li>
+	    <li><a href="card-search.html">Card Search</a></li>
+	    <li><a href="sampleBuilder.html">Deck Builder</a></a></li>
+	</ul>
 
 
-    carta: <input type="text" id="name">
-    <button type="button" onclick="loadDoc()">cerca carta</button>
-    <button type = "button" onclick="addCard()">add to deck</button>
-    <button type = "button" onclick="removeLastCard()">remove</button>
-    <p id="card">card will appear here: black magic :)</p>
-    <br>
-    deck: 
-		<p id="list"></p>
+	carta: <input type="text" id="name">
+	<button type="button" onclick="loadDoc()">Search</button>
+	<button type = "button" onclick="addCard()">Add to deck</button>
+	<button type = "button" onclick="removeLastCard()">Remove last</button>
+	<p id="card">card will appear here: black magic :)</p>
+	<br>
+	deck: 
+	<p id="list"></p>
 	<p id= "msg" </p>
-    
-
-
-    <script>
-		var lastCard;
-      function loadDoc() {
-      
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-      
-      if (this.readyState == 4 && this.status == 200) {
-
-      if(this.responseText.indexOf("No card matching your query was found in the database") == -1){
-      
-      var myObj = JSON.parse(this.responseText)[0];
-      lastCard = myObj;
-
-      
-      txt= "<img src = 'https://ygoprodeck.com/pics/"+myObj.id + ".jpg' > <br><table border='1'>"+ 
-	"<tr><td>name</td><td>"+myObj.name+"</td></tr>"+
-	"<tr><td>card type</td><td>"+myObj.type+"</td></tr>"+
-	"<tr><td>text</td><td>"+myObj.desc+ "</td></tr>"+
-	"<tr><td>archetype</td><td>"+myObj.archetype+"</td></tr>"+
 	
-      "</table>";
 
-      
-      document.getElementById("card").innerHTML = txt;
-      }else{
-      document.getElementById("card").innerHTML = "No card matching your query was found in the database";
-      }
-      }
-      }
-      xhttp.open("GET", "https://db.ygoprodeck.com/api/cardinfo.php?name="+document.getElementById("name").value, true);
-      xhttp.send();
-      }
-      //deckbuilder code
-			var cards = [];
-			function refreshDeck(){
-				var txt = "<table border='1'>";
-				for(i=0; i< cards.length; i++){
-					txt = txt + "<tr><td>"+ cards[i].name+"</td> " +
-					" <td><button type='button' onclick ='removeNumber(" + i + ")' id ='N" +
-					i + "'>X</button></td></tr>";
-				}
-				txt = txt + "</table>";
-				document.getElementById("list").innerHTML = txt;
-			}
-			function addCard(){
-				if(checkDuplicates())
-				{
-					document.getElementById("msg").innerHTML = "";
-					if (cards.length == 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
-					cards.push(lastCard);
-					refreshDeck();
-					
-				}
-				else //insert error message
-				{
-					document.getElementById("msg").innerHTML = "too many copies of that card";
-				}
-			}
-			function removeLastCard(){
-				cards.pop();
-				refreshDeck();
-			}
-			function removeNumber(n)
-			{
-				cards.splice(n,1);
-				refreshDeck();
-			}
-			function checkDuplicates(){ //checks if there are 3 copies of a card already
-				var count = 0;
-				for(i = 0; i< cards.length; i++){
-					if (cards[i].name == lastCard.name) count ++;
-				}
-				if (count < 3) return true;
-				else return false;//can be modified to check banned or limited cards as well
-			}
-    </script>
 
-  </body>
+	<script>
+	 var lastCard;
+	 function loadDoc() {
+	     
+	     var xhttp = new XMLHttpRequest();
+	     xhttp.onreadystatechange = function() {
+		 
+		 if (this.readyState == 4 && this.status == 200) {
+
+		     if(this.responseText.indexOf("No card matching your query was found in the database") == -1){
+			 
+			 var myObj = JSON.parse(this.responseText)[0];
+			 lastCard = myObj;
+
+			 
+			 txt= "<img src = 'https://ygoprodeck.com/pics/"+myObj.id + ".jpg' > <br><table border='1'>"+ 
+			      "<tr><td>name</td><td>"+myObj.name+"</td></tr>"+
+			      "<tr><td>card type</td><td>"+myObj.type+"</td></tr>"+
+			      "<tr><td>text</td><td>"+myObj.desc+ "</td></tr>"+
+			      "<tr><td>archetype</td><td>"+myObj.archetype+"</td></tr>"+
+			      
+			      "</table>";
+
+			 
+			 document.getElementById("card").innerHTML = txt;
+		     }else{
+			 document.getElementById("card").innerHTML = "No card matching your query was found in the database";
+		     }
+		 }
+	     }
+	     xhttp.open("GET", "https://db.ygoprodeck.com/api/cardinfo.php?name="+document.getElementById("name").value, true);
+	     xhttp.send();
+	 }
+	 //deckbuilder code
+	 var cards = [];
+	 function refreshDeck(){
+	     var txt = "<table border='1'>";
+	     for(i=0; i< cards.length; i++){
+		 txt = txt + "<tr><td>"+ cards[i].name+"</td> " +
+		       " <td><button type='button' onclick ='removeNumber(" + i + ")' id ='N" +
+		       i + "'>X</button></td></tr>";
+	     }
+	     txt = txt + "</table>";
+	     document.getElementById("list").innerHTML = txt;
+	 }
+	 function addCard(){
+	     if(checkDuplicates())
+	     {
+		 document.getElementById("msg").innerHTML = "";
+		 if (cards.length == 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
+		 cards.push(lastCard);
+		 refreshDeck();
+		 
+	     }
+	     else //insert error message
+	     {
+		 document.getElementById("msg").innerHTML = "too many copies of that card";
+	     }
+	 }
+	 function removeLastCard(){
+	     cards.pop();
+	     refreshDeck();
+	 }
+	 function removeNumber(n)
+	 {
+	     cards.splice(n,1);
+	     refreshDeck();
+	 }
+	 function checkDuplicates(){ //checks if there are 3 copies of a card already
+	     var count = 0;
+	     for(i = 0; i< cards.length; i++){
+		 if (cards[i].name == lastCard.name) count ++;
+	     }
+	     if (count < 3) return true;
+	     else return false;//can be modified to check banned or limited cards as well
+	 }
+	</script>
+
+    </body>
 </html>
