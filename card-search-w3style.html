@@ -73,17 +73,19 @@
 	     var xhttp = new XMLHttpRequest();
 	     xhttp.onreadystatechange = function() {
 		 if (this.readyState == 4 && this.status == 200) {
+		     
 		     var myBigObj = JSON.parse(this.responseText)[0];
-		
+		     
 		     var y = document.createElement("DATALIST");
+		     y.setAttribute("id", "card-list");
 		     document.getElementById("myForm").appendChild(y);
-		     alert("start");
+		     
+		     
 		     for (x in myBigObj){
 			 var z = document.createElement("OPTION");
 			 z.setAttribute("value", myBigObj[x].name);
 			 document.getElementById("card-list").appendChild(z);
 		     }
-		     alert("fatto!");
 		 }
 	     }
 	     xhttp.open("GET", "https://db.ygoprodeck.com/api/allcards.php", true);
