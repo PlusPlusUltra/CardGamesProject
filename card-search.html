@@ -16,7 +16,7 @@
 	 
 	 li {
 	     float: left;
-	     border-right: 2px solid #000;
+	     border-right: 2px solid black;
 	 }
 
 	 li a {
@@ -32,11 +32,18 @@
 	     color: white;
 	 }
 
-	 h1{
-	     text-align: center;
-	     size: 300%;
-	     color: blue;
+	 table{
+	     border-collapse: collapse;
+	 }
+
+	 table,th,tr,td{
+	     border: 2px solid black;
+	     vertical-align: top;
 	     
+	 }
+	 td{
+	     paddind: 5px;
+	     width: 300px;
 	 }
 	</style>
     </head>
@@ -45,20 +52,23 @@
 	<ul>
 	    <li><a href="raw-scheme.html">schema</a></li>
 	    <li><a href="card-search.html">Card Search</a></li>
-	    <li><a href="sampleBuilder.html">Deck Builder</a></a></li>
+	    <li><a href="sampleBuilder.html">Deck Builder</a></li>
 	</ul>
 
-
+	
 	card: <input type="text" id="name">
 	<button type="button" onclick="loadDoc()">Search</button>
 	<button type = "button" onclick="addCard()">Add to deck</button>
 	<button type = "button" onclick="removeLastCard()">Remove last</button>
-	<p id="card">card will appear here: black magic :)</p>
-	<br>
-	deck: 
-	<p id="list"></p>
-	<p id= "msg" </p>
 	
+	
+	<ul>
+	    <li><p id="card-img">card image</p></li>
+	    <li><p id="card-desc">card description tab</p></li>
+	    <li><p id="list">deck</p></li>
+	    <li><p id= "msg">other fancy messages</p></li>
+		    
+	</ul>
 
 
 	<script>
@@ -75,19 +85,18 @@
 			 var myObj = JSON.parse(this.responseText)[0];
 			 lastCard = myObj;
 
-			 
-			 txt= "<img src = 'https://ygoprodeck.com/pics/"+myObj.id + ".jpg' > <br><table border='1'>"+ 
-			      "<tr><td>name</td><td>"+myObj.name+"</td></tr>"+
-			      "<tr><td>card type</td><td>"+myObj.type+"</td></tr>"+
-			      "<tr><td>text</td><td>"+myObj.desc+ "</td></tr>"+
-			      "<tr><td>archetype</td><td>"+myObj.archetype+"</td></tr>"+
-			      
-			      "</table>";
+			 img_txt = "<img src='https://ygoprodeck.com/pics/"+myObj.id + ".jpg'>";
+			 desc_txt= "<table border='1'>"+ 
+				   "<tr><td>name</td><td>"+myObj.name+"</td></tr>"+
+				   "<tr><td>card type</td><td>"+myObj.type+"</td></tr>"+
+				   "<tr><td>text</td><td>"+myObj.desc+ "</td></tr>"+
+				   "<tr><td>archetype</td><td>"+myObj.archetype+"</td></tr>"+
+				   "</table>";
 
-			 
-			 document.getElementById("card").innerHTML = txt;
+			 document.getElementById("card-img").innerHTML = img_txt;
+			 document.getElementById("card-desc").innerHTML = desc_txt;
 		     }else{
-			 document.getElementById("card").innerHTML = "No card matching your query was found in the database";
+			 document.getElementById("card-desc").innerHTML = "No card matching your query was found in the database";
 		     }
 		 }
 	     }
@@ -112,19 +121,19 @@
 	     
 	     if (!check60())
 	     {
-			 document.getElementById("msg").innerHTML = "you can't have more than 60 cards in your deck";
+		 document.getElementById("msg").innerHTML = "you can't have more than 60 cards in your deck";
 	     }
 	     else if(!checkDuplicates())
 	     {
-			 	document.getElementById("msg").innerHTML = "too many copies of a " + lastCard.ban_tcg + " card";
+		 document.getElementById("msg").innerHTML = "too many copies of a " + lastCard.ban_tcg + " card";
 
 	     }
 	     else{
-			//   document.getElementById("msg").innerHTML = "";
-			   cards.push(lastCard);
-			   refreshDeck();
+		 //   document.getElementById("msg").innerHTML = "";
+		 cards.push(lastCard);
+		 refreshDeck();
 		 //if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
-		 }
+	     }
 	 }
 	 function removeLastCard(){
 	     cards.pop();
@@ -137,16 +146,16 @@
 	     cards.splice(n,1);
 	     refreshDeck();
 	     //document.getElementById("msg").innerHTML = "";
-		 //if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
+	     //if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
 	 }
 	 function checkDuplicates(){ //checks if there are 3 copies of a card already
 	     var count = 0;
 	     var limit = 0;
 	     
-		 if (lastCard.ban_tcg == "Limited") limit = 1;
-		 else if (lastCard.ban_tcg == "Semi-Limited") limit = 2;
-		 else if (lastCard.ban_tcg == "Banned") limit = 0;
-		 else limit = 3;
+	     if (lastCard.ban_tcg == "Limited") limit = 1;
+	     else if (lastCard.ban_tcg == "Semi-Limited") limit = 2;
+	     else if (lastCard.ban_tcg == "Banned") limit = 0;
+	     else limit = 3;
 	     for(i = 0; i< cards.length; i++){
 		 if (cards[i].name == lastCard.name) count ++;
 	     }
@@ -154,8 +163,8 @@
 	     else return false;
 	 }
 	 function check60(){
-		 if (cards.length >= 60) return false;
-		 else return true;
+	     if (cards.length >= 60) return false;
+	     else return true;
 	 }
 	 
 	</script>
