@@ -2,32 +2,34 @@
 <html>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <body>
+
+	<!-- top seach bar  -->
 	<div class="w3-top">
 	    <div class="w3-bar w3-orange w3-left-align w3-large">
-		::before
 		<a class="w3-bar-item w3-button w3-hover-brown" href="raw-scheme.html">schema</a>
 		<a class="w3-bar-item w3-button w3-hover-brown" href="card-search.html">Card Search</a>
 		<a class="w3-bar-item w3-button w3-hover-brown" href="sampleBuilder.html">Deck Builder</a>
 		<input class="ui-autocomplete-input" autocomplete="off" type="text" id="name" onclick="this.select()"  onKeyDown="if(event.keyCode==13) loadDoc();">
-		::after
 	    </div>
 	</div>
 
-	
-	card: 
-	<button type="button" onclick="loadDoc()">Search</button>
-	<button type = "button" onclick="addCard()">Add to deck</button>
-	<button type = "button" onclick="removeLastCard()">Remove last</button>
-	
-	
-	<ul>
-	    <li><p id="card-img">card image</p></li>
-	    <li><p id="card-desc">card description tab</p></li>
-	    <li><p id="list">deck</p></li>
-	    <li><p id= "msg">other fancy messages</p></li>
-	    
-	</ul>
 
+	<!-- centered element in the page  -->
+	<div>
+	    card: 
+	    <button type="button" onclick="loadDoc()">Search</button>
+	    <button type = "button" onclick="addCard()">Add to deck</button>
+	    <button type = "button" onclick="removeLastCard()">Remove last</button>
+	    
+	    
+	    <ul>
+		<li><p id="card-img">card image</p></li>
+		<li><p id="card-desc">card description tab</p></li>
+		<li><p id="list">deck</p></li>
+		<li><p id= "msg">other fancy messages</p></li>
+		
+	    </ul>
+	</div>
 
 	<script>
 	 function loadDoc() {
