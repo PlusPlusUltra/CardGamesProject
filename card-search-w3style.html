@@ -10,11 +10,15 @@
 		<a class="w3-bar-item w3-button w3-hover-brown" href="card-search.html">Card Search</a>
 		<a class="w3-bar-item w3-button w3-hover-brown" href="sampleBuilder.html">Deck Builder</a>
 		<input class="ui-autocomplete-input" list="card-list" autocomplete="off" type="text" id="name" onclick="this.select()" placeholder="Input a card name" onKeyDown="if(event.keyCode==13) loadDoc();">
-
-		<button type = "button" class="w3-button w3-hover-brown" style="float:right" onclick="autocompleteDb()">update local DB</button>
-		<button type = "button" class="w3-button w3-hover-brown" style="float:right" onclick="addCard()">Add to deck</button>
-		<button type = "button" class="w3-button w3-hover-brown" style="float:right" onclick="removeLastCard()">Remove last</button>
-		<div class="w3-brown w3-padding" style="float:right"> Card OPS: </div>
+		<div class="w3-dropdown-hover w3-right">
+		    <button class="w3-button w3-brown w3-hover-orange">Card OPS</button>
+		    <div class="w3-dropdown-content w3-bar-block w3-orange" style="right:0">
+			<button type = "button" class="w3-bar-item w3-button w3-hover-brown"  onclick="autocompleteDb()">update local DB</button>
+			<button type = "button" class="w3-bar-item w3-button w3-hover-brown"  onclick="addCard()">Add to deck</button>
+			<button type = "button" class="w3-bar-item w3-button w3-hover-brown"  onclick="removeLastCard()">Remove last</button>
+			
+		    </div>
+		</div>
 	    </div>
 	</div>
 
@@ -28,8 +32,14 @@
 		<div class="w3-third w3-center">
 		    <div id="card-desc">card description tab </div>
 		</div>
-		<p id="list">deck</p>
-		<p id= "msg">other fancy messages</p>
+	    </div>
+	</div>
+	<div class="w3-row-padding w3-padding-64 w3-container">
+	    <div class="w3-content-card">
+		<div class="w3-third w3-center">
+		    <p id="list">deck</p>
+		    <p id= "msg">other fancy messages</p>
+		</div>
 
 	    </div>
 	</div>
