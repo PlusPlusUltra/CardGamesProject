@@ -29,7 +29,7 @@
 		<div class="w3-half w3-center">
 		    <div id="card-img">card image</div>
 		</div>
-		<div class="w3-third w3-center">
+		<div class="w3-half w3-center">
 		    <div id="card-desc">card description tab </div>
 		</div>
 	    </div>
@@ -100,6 +100,7 @@
 	     }
 	     xhttp.open("GET", "https://db.ygoprodeck.com/api/allcards.php", true);
 	     xhttp.send();
+	     document.getElementById("name").placeholder = "Database Updated!";
 	 }
 
 
