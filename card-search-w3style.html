@@ -1,4 +1,30 @@
 <!DOCTYPE html>
+<head>
+    <style>
+     ul {
+	 list-style-type: none;
+	 margin: 1px;
+	 padding: 0;
+	 background: #db9833;
+	 overflow: hidden;
+     }
+
+     li {
+	 display:inline-block;
+         color:white;
+	 margin:2px;
+     }
+
+     li a {
+	 display: block;
+	 color: black;
+	 text-align: center;
+	 margin: 5px;
+	 text-decoration: none;
+     }
+
+    </style>
+</head>
 <html>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <body>
@@ -6,8 +32,7 @@
 	<!-- top seach bar  -->
 	<div class="w3-top">
 	    <div class="w3-bar w3-orange w3-left-align">
-		<a class="w3-bar-item w3-button w3-hover-brown" href="raw-scheme.html">schema</a>
-		<a class="w3-bar-item w3-button w3-hover-brown" href="card-search.html">Card Search</a>
+		<a class="w3-bar-item w3-button w3-hover-brown" href="card-search-w3style.html">Card Search</a>
 		<a class="w3-bar-item w3-button w3-hover-brown" href="sampleBuilder.html">Deck Builder</a>
 		<input class="ui-autocomplete-input" list="card-list" autocomplete="off" type="text" id="name" onclick="this.select()" placeholder="Input a card name" onKeyDown="if(event.keyCode==13) loadDoc();">
 		<div class="w3-dropdown-hover w3-right">
@@ -29,7 +54,7 @@
 		<div class="w3-half w3-center">
 		    <div id="card-img">card image</div>
 		</div>
-		<div class="w3-half w3-center">
+		<div class="w3-third w3-center">
 		    <div id="card-desc">card description tab </div>
 		</div>
 	    </div>
@@ -59,13 +84,43 @@
 			 var myObj = JSON.parse(this.responseText)[0];
 			 lastCard = myObj;
 
+			 //filter optional information
+			 var card_info = "";
+			 card_type = myObj.type;
+			 if(myObj.archetype){
+			     card_info += "<ul><li><a>Archetype: "+myObj.archetype+"</a></li></ul>";
+			 }
+			 if(myObj.type){
+			     if(card_type.indexOf("Spell") != -1 ){
+				 card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
+			     }else if(card_type.indexOf("Monster") != -1){
+				 card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
+				 if(card_type.indexOf("Link") != -1){
+				     link = 0;
+				     if(parseInt(myObj.level)){
+					 link_rating = myObj.level;
+				     }else{
+					 link_rating = myObj.linkval
+				     }
+				     card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>LINK Rating: "+link_rating+"</a></li></ul>";
+				 }else if(card_type.indexOf("XYZ") != -1){
+				     card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>DEF:  "+myObj.def+"</a></li><li><a>RANK:  "+myObj.level+"</a></li></ul>"
+				 }else{
+				     card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>DEF:  "+myObj.def+"</a></li><li><a>LVL:  "+myObj.level+"</a></li></ul>";
+				 }
+				 
+			     }else if(card_type.indexOf("Trap") != -1){
+				 card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
+			     }
+			     
+			 }
+			 
+
+			 
 			 img_txt = "<img src='https://ygoprodeck.com/pics/"+myObj.id + ".jpg'>";
-			 desc_txt= "<table border='1'>"+ 
-				   "<tr><td>name</td><td>"+myObj.name+"</td></tr>"+
-				   "<tr><td>card type</td><td>"+myObj.type+"</td></tr>"+
-				   "<tr><td>text</td><td>"+myObj.desc+ "</td></tr>"+
-				   "<tr><td>archetype</td><td>"+myObj.archetype+"</td></tr>"+
-				   "</table>";
+			 desc_txt= "<ul><li><a>"+myObj.name+"</a></li></ul>"+
+				   "<ul><li><a>"+myObj.desc+ "</a></li></ul>"+
+				   card_info;
 
 			 document.getElementById("card-img").innerHTML = img_txt;
 			 document.getElementById("card-desc").innerHTML = desc_txt;

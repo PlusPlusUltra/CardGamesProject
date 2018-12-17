@@ -1,9 +1,9 @@
 auto complete //half done, bisogna automatizzare l'importazione dei nomi delle carte
 
 sistemare bug sul tasto "enter" che da risultato nullo quando si preme
-con l'auto complete attivo
+con l'auto complete attivo // lo lasciamo
 
-risistemare la parte grafica //half done! vedere nuovo file, fatta la batta principale
+risistemare la parte grafica //manca solo la corretta descrizione delle carte pendulum
 
 aggiungere più commenti dove necessario NB: in commenti in html sono tra <!-- e --!>
 
@@ -11,6 +11,8 @@ dividere in due documenti
 
 (idea) mostrare le info di una carta se la clicchi nel deckbuilder
 
-HO INCASINATO DI NUOVO L'INDENTAZIONE <- maledetto, l'ho ri-sistemata!
-
 CI SIAMO DIMENTICATI L'EXTRA DECK, ora finisce tutto nel main deck
+
+delta ultimo update:
+-sistemata la descrizione delle carte
+-aspetto istruzioni per come sistemare la parte grafica del deck (se necessario)
