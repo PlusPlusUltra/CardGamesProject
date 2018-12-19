@@ -3,18 +3,14 @@ auto complete //half done, bisogna automatizzare l'importazione dei nomi delle c
 sistemare bug sul tasto "enter" che da risultato nullo quando si preme
 con l'auto complete attivo // lo lasciamo
 
-risistemare la parte grafica //manca solo la corretta descrizione delle carte pendulum
-
-aggiungere più commenti dove necessario NB: in commenti in html sono tra <!-- e --!>
-
 dividere in due documenti
-
-(idea) mostrare le info di una carta se la clicchi nel deckbuilder
 
 CI SIAMO DIMENTICATI L'EXTRA DECK, ora finisce tutto nel main deck
 
 trasformare il deck in localstorage per non chiamare una ricerca ogni volta che si usa la jquery
 
 delta ultimo update:
--sistemata la descrizione delle carte
--aspetto istruzioni per come sistemare la parte grafica del deck (se necessario)
+-sistemati i mostri pendulum (paolo)
+-aggiurnata la parte grafica del deck (paolo)
+-ora una carta del deck viene mostrata se ci si clicca sopra
+fatto con jquery(emanuele)

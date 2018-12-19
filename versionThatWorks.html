@@ -111,14 +111,15 @@
 	     //filter optional information
 	     var card_info = "";
 	     card_type = myObj.type;
-	     if(myObj.archetype){
-		 card_info += "<ul><li><a>Archetype: "+myObj.archetype+"</a></li></ul>";
-	     }
 	     if(myObj.type){
+		 //magia
 		 if(card_type.indexOf("Spell") != -1 ){
 		     card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
+
+		     //mostro
 		 }else if(card_type.indexOf("Monster") != -1){
 		     card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
+		     //link
 		     if(card_type.indexOf("Link") != -1){
 			 link = 0;
 			 if(parseInt(myObj.level)){
@@ -127,122 +128,141 @@
 			     link_rating = myObj.linkval
 			 }
 			 card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>LINK Rating: "+link_rating+"</a></li></ul>";
-		     }else if(card_type.indexOf("XYZ") != -1){
-			 card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>DEF:  "+myObj.def+"</a></li><li><a>RANK:  "+myObj.level+"</a></li></ul>"
-		     }else{
-			 card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>DEF:  "+myObj.def+"</a></li><li><a>LVL:  "+myObj.level+"</a></li></ul>";
-		     }   
-		 }else if(card_type.indexOf("Trap") != -1){
-		     card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
-		 }	 
-	     }
-	     img_txt = "<img src='https://ygoprodeck.com/pics/"+myObj.id + ".jpg'>";
-	     desc_txt= "<ul><li><a>"+myObj.name+"</a></li></ul>"+
-		       "<ul><li><a>"+myObj.desc+ "</a></li></ul>"+
-		       card_info;
-	     document.getElementById("card-img").innerHTML = img_txt;
-	     document.getElementById("card-desc").innerHTML = desc_txt;
-	 }
 
-	 //autocomplete chache database code ############
-	 function autocompleteDb(){
-	     var xhttp = new XMLHttpRequest();
-	     xhttp.onreadystatechange = function() {
-		 if (this.readyState == 4 && this.status == 200) {
-		     var myBigObj = JSON.parse(this.responseText)[0];
-		     var y = document.createElement("DATALIST");
-		     y.setAttribute("id", "card-list");
-		     document.getElementById("myForm").appendChild(y);
-		     for (x in myBigObj){
-			 var z = document.createElement("OPTION");
-			 z.setAttribute("value", myBigObj[x].name);
-			 document.getElementById("card-list").appendChild(z);
+			 //xyz
+		     }else if(card_type.indexOf("XYZ") != -1){
+			 if(card_type.indexOf("Pendulum") != -1) {
+			     myObj.desc = "<p>"+myObj.desc.replace("----------------------------------------","</p><p>")+"</p>";
+			     card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>DEF:  "+myObj.def+"</a></li><li><a>RANK:  "+myObj.level+"</a></li><li><a>SCALE:  "+myObj.scale+"</a></li></ul>";
+			 }else{
+			     card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>DEF:  "+myObj.def+"</a></li><li><a>RANK:  "+myObj.level+"</a></li></ul>"
+			 }
+			 
+			     //pendulum (sinchro fusione, normale effetto)
+			 }else if(card_type.indexOf("Pendulum") != -1) {
+			     myObj.desc = "<p>"+myObj.desc.replace("----------------------------------------","</p><p>")+"</p>";
+			     card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>DEF:  "+myObj.def+"</a></li><li><a>LVL:  "+myObj.level+"</a></li><li><a>SCALE:  "+myObj.scale+"</a></li></ul>";
+			     //altro (sinchro,fusione,normale,effetto)
+			 }else{
+			     card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>DEF:  "+myObj.def+"</a></li><li><a>LVL:  "+myObj.level+"</a></li></ul>";
+			 }
+
+			 
+		     }else if(card_type.indexOf("Trap") != -1){
+			 card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
 		     }
 		 }
+		 if(myObj.archetype){
+		     card_info += "<ul><li><a>Archetype: "+myObj.archetype+"</a></li></ul>";
+		 }
+		 
+		 img_txt = "<img src='https://ygoprodeck.com/pics/"+myObj.id + ".jpg'>";
+		 desc_txt= "<ul><li><a>"+myObj.name+"</a></li></ul>"+
+			   "<ul><li><a>"+myObj.desc+ "</a></li></ul>"+
+			   card_info;
+		 document.getElementById("card-img").innerHTML = img_txt;
+		 document.getElementById("card-desc").innerHTML = desc_txt;
 	     }
-	     xhttp.open("GET", "https://db.ygoprodeck.com/api/allcards.php", true);
-	     xhttp.send();
-	     document.getElementById("name").placeholder = "Database Updated!";
-	 }
+
+	     //autocomplete chache database code ############
+	     function autocompleteDb(){
+		 var xhttp = new XMLHttpRequest();
+		 xhttp.onreadystatechange = function() {
+		     if (this.readyState == 4 && this.status == 200) {
+			 var myBigObj = JSON.parse(this.responseText)[0];
+			 var y = document.createElement("DATALIST");
+			 y.setAttribute("id", "card-list");
+			 document.getElementById("myForm").appendChild(y);
+			 for (x in myBigObj){
+			     var z = document.createElement("OPTION");
+			     z.setAttribute("value", myBigObj[x].name);
+			     document.getElementById("card-list").appendChild(z);
+			 }
+		     }
+		 }
+		 xhttp.open("GET", "https://db.ygoprodeck.com/api/allcards.php", true);
+		 xhttp.send();
+		 document.getElementById("name").placeholder = "Database Updated!";
+	     }
 
 
-	 
-	 //deckbuilder code ############
-	 var cards = [];
-	 function refreshDeck(){
-	     var txt = "<ul>";
-	     for(i=0; i< cards.length; i++){
-		 txt = txt + '<li class = "vertical"><a class="sCard" href="#">'+ cards[i].name+"</a></li>";
-	     }
-	     txt = txt + "</ul>";
-	     document.getElementById("list").innerHTML = txt;
-	     document.getElementById("msg").innerHTML = "";
-	     if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
-	 }
-	 
-	 function addCard(){
 	     
-	     if (!check60())
-	     {
-		 document.getElementById("msg").innerHTML = "you can't have more than 60 cards in your deck";
+	     //deckbuilder code ############
+	     var cards = [];
+	     function refreshDeck(){
+		 var txt = "<ul>";
+		 for(i=0; i< cards.length; i++){
+		     txt = txt + '<li class = "vertical"><a class="sCard" href="#">'+ cards[i].name+"</a></li>";
+		 }
+		 txt = txt + "</ul>";
+		 document.getElementById("list").innerHTML = txt;
+		 document.getElementById("msg").innerHTML = "";
+		 if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
 	     }
-	     else if(!checkDuplicates())
-	     {
-		 ban_status = lastCard.ban_tcg;
-		 if(!ban_status) ban_status = "Unlimited";
-		 document.getElementById("msg").innerHTML = "too many copies of a " +ban_status + " card";
+	     
+	     function addCard(){
+		 
+		 if (!check60())
+		 {
+		     document.getElementById("msg").innerHTML = "you can't have more than 60 cards in your deck";
+		 }
+		 else if(!checkDuplicates())
+		 {
+		     ban_status = lastCard.ban_tcg;
+		     if(!ban_status) ban_status = "Unlimited";
+		     document.getElementById("msg").innerHTML = "too many copies of a " +ban_status + " card";
+
+		 }
+		 else{
+		     //   document.getElementById("msg").innerHTML = "";
+		     cards.push(lastCard);
+		     refreshDeck();
+		     //if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
+		 }
+	     }
+	     function removeLastCard(){
+		 cards.pop();
+		 refreshDeck();
+		 //document.getElementById("msg").innerHTML = "";
 
 	     }
-	     else{
-		 //   document.getElementById("msg").innerHTML = "";
-		 cards.push(lastCard);
+	     function removeNumber(n)
+	     {
+		 cards.splice(n,1);
 		 refreshDeck();
+		 //document.getElementById("msg").innerHTML = "";
 		 //if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
 	     }
-	 }
-	 function removeLastCard(){
-	     cards.pop();
-	     refreshDeck();
-	     //document.getElementById("msg").innerHTML = "";
-
-	 }
-	 function removeNumber(n)
-	 {
-	     cards.splice(n,1);
-	     refreshDeck();
-	     //document.getElementById("msg").innerHTML = "";
-	     //if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
-	 }
-	 function checkDuplicates(){ //checks if there are 3 copies of a card already
-	     var count = 0;
-	     var limit = 0;
-	     
-	     if (lastCard.ban_tcg == "Limited") limit = 1;
-	     else if (lastCard.ban_tcg == "Semi-Limited") limit = 2;
-	     else if (lastCard.ban_tcg == "Banned") limit = 0;
-	     else limit = 3;
-	     for(i = 0; i< cards.length; i++){
-		 if (cards[i].name == lastCard.name) count ++;
+	     function checkDuplicates(){ //checks if there are 3 copies of a card already
+		 var count = 0;
+		 var limit = 0;
+		 
+		 if (lastCard.ban_tcg == "Limited") limit = 1;
+		 else if (lastCard.ban_tcg == "Semi-Limited") limit = 2;
+		 else if (lastCard.ban_tcg == "Banned") limit = 0;
+		 else limit = 3;
+		 for(i = 0; i< cards.length; i++){
+		     if (cards[i].name == lastCard.name) count ++;
+		 }
+		 if (count < limit) return true;
+		 else return false;
 	     }
-	     if (count < limit) return true;
-	     else return false;
-	 }
-	 function check60(){
-	     if (cards.length >= 60) return false;
-	     else return true;
-	 }
-	 //event handler with jquery
-	 //$(document).ready(function(){
-	 $("#list").on("click", ".sCard", function(e){
+	     function check60(){
+		 if (cards.length >= 60) return false;
+		 else return true;
+	     }
+	     //event handler with jquery
+	     //$(document).ready(function(){
+	     $("#list").on("click", ".sCard", function(e){
 
-	     //qui ci va la funzione per il display della carta
-	     var testo = $(this).text();
-	     $('#name').val(testo);
-	     loadDoc();
-	 });
-	 //});
-	 
-	 
+		 //qui ci va la funzione per il display della carta
+		 var testo = $(this).text();
+		 $('#name').val(testo);
+		 loadDoc();
+	     });
+	     //});
+	     
+	     
 	</script>
 
     </body>
