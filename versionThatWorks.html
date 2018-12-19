@@ -80,10 +80,10 @@
 
 	<script>
 
-	 //card search and display code ############
+	 //card search and display code ###
 
 
-	 //search code, call this only when mandatory
+	 //search code, call this only when mandatory #
 	 function loadDoc() {
 	     
 	     var xhttp = new XMLHttpRequest();
@@ -94,6 +94,7 @@
 			 var myObj = JSON.parse(this.responseText)[0];
 			 lastCard = myObj;
 			 displayCard(myObj);
+			 localStoreage.LastCardString = JSON.stringify(myObj);
 		     }else{
 			 document.getElementById("card-desc").innerHTML = "No card matching your query was found in the database";
 		     }
@@ -102,10 +103,11 @@
 	     xhttp.open("GET", "https://db.ygoprodeck.com/api/cardinfo.php?name="+document.getElementById("name").value, true);
 	     xhttp.send();
 	 }
-
+	 //#
 	 
-	 //card display function
+	 //card display function #
 	 function displayCard(current_card){
+
 	     myObj = current_card;
 
 	     //filter optional information
@@ -162,11 +164,19 @@
 		       card_info;
 	     document.getElementById("card-img").innerHTML = img_txt;
 	     document.getElementById("card-desc").innerHTML = desc_txt;
+	     var card_json = { name : myObj.name, image : img_txt, card : myObj};
+	     localStorage.LastCardString = JSON.stringify(card_json);
+	     document.getElementById("msg").innerHTML = "card loaded";
+	     
 	 }
+	 
+	 
+	 //#
+	 //###
+	 
+	 //autocomplete chache database code ###
 
-	 //autocomplete chache database code ############
-
-	 //download a fresh databse from api to local and document
+	 //download a fresh databse from api to local and document #
 	 function loadDbfromApi(){
 	     var xhttp = new XMLHttpRequest();
 	     xhttp.onreadystatechange = function() {
@@ -181,8 +191,9 @@
 	     xhttp.send();
 	     document.getElementById("msg").innerHTML = "Database Updated from APi!";
 	 }
+	 //#
 
-	 //load a database from json obj to document
+	 //load a database from json obj to document #
 	 function loadDbtoDoc(db_obj){
 	     var y = document.createElement("DATALIST");
 	     y.setAttribute("id", "card-list");
@@ -193,16 +204,19 @@
 		 document.getElementById("card-list").appendChild(z);
 	     }
 	 }
-
-	 //if the local json is loaded, load it to doc
+	 //#
+	 
+	 //if the local json is loaded, load it to doc #
 	 function loadDbfromLocal(){
 	     if(localStorage.Dbloaded){
 		 loadDbtoDoc(JSON.parse(localStorage.autocompleteDb));
 	     }
 	     document.getElementById("msg").innerHTML = "Database Updated from local!";
 	 }
+	 //#
 	 
-	 
+	 //check the state of the local database and update
+	 //the autocomplete list accordingly #
 	 function loadautocompleteDb(){
 	     if (typeof(Storage) !== "undefined") {
 		 document.getElementById("msg").innerHTML = localStorage.Dbloaded +"1loading from where?";
@@ -217,12 +231,14 @@
 	     }
 	     
 	 }
+	 //#
 	 
 	 
 	 
-	 //deckbuilder code ############
+	 //deckbuilder code ###
 	 var cards = [];
 	 function refreshDeck(){
+
 	     var txt = "<ul>";
 	     for(i=0; i< cards.length; i++){
 		 txt = txt + '<li class = "vertical"><a class="sCard" href="#">'+ cards[i].name+"</a></li>";
@@ -234,6 +250,8 @@
 	 }
 	 
 	 function addCard(){
+
+	     //lastCard = JSON.parse(localStorage.LastCardString).card;
 	     
 	     if (!check60())
 	     {
@@ -247,8 +265,11 @@
 
 	     }
 	     else{
-		 //   document.getElementById("msg").innerHTML = "";
+		 //document.getElementById("msg").innerHTML = "";
 		 cards.push(lastCard);
+		 //current_deck = JSON.parse(localStorage.Deck);
+		 //localStorage.Deck = JSON.stringify(current_deck.push(lastCard));
+		 
 		 refreshDeck();
 		 //if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
 	     }
@@ -284,12 +305,19 @@
 	     if (cards.length >= 60) return false;
 	     else return true;
 	 }
-	 //event handler with jquery
+	 //###
+	 
+	 
+	 //event handler with jquery ###
 
 	 $(document).ready(function(){
-	     //document.getElementById("msg").innerHTML = "welcome!";
-	     document.getElementById("msg").innerHTML = "loading Db";
+
+	     
 	     loadautocompleteDb();
+
+	     if(localStorage.Deck== null){
+		 localStorage.Deck = "[]"; 
+	     }
 	     
 	     $("#list").on("click", ".sCard", function(e){
 
@@ -303,7 +331,7 @@
 		 localStorage.clear();
 	     });
 	 });
-	 
+	 //###
 	</script>
 
     </body>
