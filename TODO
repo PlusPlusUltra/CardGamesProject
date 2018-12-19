@@ -13,6 +13,8 @@ dividere in due documenti
 
 CI SIAMO DIMENTICATI L'EXTRA DECK, ora finisce tutto nel main deck
 
+trasformare il deck in localstorage per non chiamare una ricerca ogni volta che si usa la jquery
+
 delta ultimo update:
 -sistemata la descrizione delle carte
 -aspetto istruzioni per come sistemare la parte grafica del deck (se necessario)

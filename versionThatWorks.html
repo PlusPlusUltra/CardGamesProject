@@ -5,25 +5,33 @@
 	 list-style-type: none;
 	 margin: 1px;
 	 padding: 0;
-	 background: #db9833;
+	 background-color: #db9833;
 	 overflow: hidden;
      }
 
      li {
 	 display:inline-block;
          color:white;
-	 margin:2px;
+     }
+     li.vertical{
+	 display:block;
      }
 
      li a {
 	 display: block;
 	 color: black;
 	 text-align: center;
-	 margin: 5px;
+	 padding: 10px;
 	 text-decoration: none;
+     }
+     .sCard:hover{
+	 background-color: #7e4a35;
+	 color: white;
      }
 
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
 </head>
 <html>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -69,8 +77,6 @@
 	    </div>
 	</div>
 	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
-	</script>
 
 	<script>
 
@@ -84,7 +90,6 @@
 	     xhttp.onreadystatechange = function() {
 		 
 		 if (this.readyState == 4 && this.status == 200) {
-
 		     if(this.responseText.indexOf("No card matching your query was found in the database") == -1){
 			 var myObj = JSON.parse(this.responseText)[0];
 			 lastCard = myObj;
@@ -126,45 +131,28 @@
 			 card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>DEF:  "+myObj.def+"</a></li><li><a>RANK:  "+myObj.level+"</a></li></ul>"
 		     }else{
 			 card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>DEF:  "+myObj.def+"</a></li><li><a>LVL:  "+myObj.level+"</a></li></ul>";
-		     }
-		     
+		     }   
 		 }else if(card_type.indexOf("Trap") != -1){
 		     card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
-		 }
-		 
+		 }	 
 	     }
-	     
-
-	     
 	     img_txt = "<img src='https://ygoprodeck.com/pics/"+myObj.id + ".jpg'>";
 	     desc_txt= "<ul><li><a>"+myObj.name+"</a></li></ul>"+
 		       "<ul><li><a>"+myObj.desc+ "</a></li></ul>"+
 		       card_info;
-
 	     document.getElementById("card-img").innerHTML = img_txt;
 	     document.getElementById("card-desc").innerHTML = desc_txt;
-	     
 	 }
-
-
-
-
-
-	 
 
 	 //autocomplete chache database code ############
 	 function autocompleteDb(){
 	     var xhttp = new XMLHttpRequest();
 	     xhttp.onreadystatechange = function() {
 		 if (this.readyState == 4 && this.status == 200) {
-		     
 		     var myBigObj = JSON.parse(this.responseText)[0];
-		     
 		     var y = document.createElement("DATALIST");
 		     y.setAttribute("id", "card-list");
 		     document.getElementById("myForm").appendChild(y);
-		     
-		     
 		     for (x in myBigObj){
 			 var z = document.createElement("OPTION");
 			 z.setAttribute("value", myBigObj[x].name);
@@ -184,13 +172,14 @@
 	 function refreshDeck(){
 	     var txt = "<ul>";
 	     for(i=0; i< cards.length; i++){
-		 txt = txt + "<p <li class = sCard>"+ cards[i].name+"</li></p>";
+		 txt = txt + '<li class = "vertical"><a class="sCard" href="#">'+ cards[i].name+"</a></li>";
 	     }
 	     txt = txt + "</ul>";
 	     document.getElementById("list").innerHTML = txt;
 	     document.getElementById("msg").innerHTML = "";
 	     if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
 	 }
+	 
 	 function addCard(){
 	     
 	     if (!check60())
@@ -199,7 +188,9 @@
 	     }
 	     else if(!checkDuplicates())
 	     {
-		 document.getElementById("msg").innerHTML = "too many copies of a " + lastCard.ban_tcg + " card";
+		 ban_status = lastCard.ban_tcg;
+		 if(!ban_status) ban_status = "Unlimited";
+		 document.getElementById("msg").innerHTML = "too many copies of a " +ban_status + " card";
 
 	     }
 	     else{
