@@ -69,6 +69,10 @@
 	    </div>
 	</div>
 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+	</script>
+	
+	
 	<script>
 
 	 //card search and display code ############
@@ -223,6 +227,16 @@
 	     if (cards.length >= 60) return false;
 	     else return true;
 	 }
+	 //event handler with jquery
+	 $(document).ready(function(){
+		 $("p").click(function(){
+			 //qui ci va la funzione per il display della carta
+			 var testo = $(this).text();
+			 var myTesto = testo.substring(0,testo.length -2);
+			 $('#name').val(myTesto);
+			 loadDoc();
+		 });
+	 });
 	 
 	</script>
 
