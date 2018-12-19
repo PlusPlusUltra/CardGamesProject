@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<head>
+    <style>
+     ul {
+	 list-style-type: none;
+	 margin: 1px;
+	 padding: 0;
+	 background: #db9833;
+	 overflow: hidden;
+     }
+
+     li {
+	 display:inline-block;
+         color:white;
+	 margin:2px;
+     }
+
+     li a {
+	 display: block;
+	 color: black;
+	 text-align: center;
+	 margin: 5px;
+	 text-decoration: none;
+     }
+
+    </style>
+</head>
+<html>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <body>
+	<form id="myForm"></form>
+	<!-- top seach bar  -->
+	<div class="w3-top">
+	    <div class="w3-bar w3-orange w3-left-align">
+		<a class="w3-bar-item w3-button w3-hover-brown" href="card-search-w3style.html">Card Search</a>
+		<a class="w3-bar-item w3-button w3-hover-brown" href="sampleBuilder.html">Deck Builder</a>
+		<input class="ui-autocomplete-input" list="card-list" autocomplete="off" type="text" id="name" onclick="this.select()" placeholder="Input a card name" onKeyDown="if(event.keyCode==13) loadDoc();">
+		<div class="w3-dropdown-hover w3-right">
+		    <button class="w3-button w3-brown w3-hover-orange">Card OPS</button>
+		    <div class="w3-dropdown-content w3-bar-block w3-orange" style="right:0">
+			<button type = "button" class="w3-bar-item w3-button w3-hover-brown"  onclick="autocompleteDb()">update local DB</button>
+			<button type = "button" class="w3-bar-item w3-button w3-hover-brown"  onclick="addCard()">Add to deck</button>
+			<button type = "button" class="w3-bar-item w3-button w3-hover-brown"  onclick="removeLastCard()">Remove last</button>
+			
+		    </div>
+		</div>
+	    </div>
+	</div>
+
+
+	<!-- centered element in the page  -->
+	<div class="w3-row-padding w3-padding-64 w3-container">
+	    <div class="w3-content-card">
+		<div class="w3-half w3-center">
+		    <div id="card-img">card image</div>
+		</div>
+		<div class="w3-third w3-center">
+		    <div id="card-desc">card description tab </div>
+		</div>
+	    </div>
+	</div>
+	<div class="w3-row-padding w3-padding-64 w3-container">
+	    <div class="w3-content-card">
+		<div class="w3-third w3-center">
+		    <p id="list">deck</p>
+		    <p id= "msg">other fancy messages</p>
+		</div>
+
+	    </div>
+	</div>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+	</script>
+
+	<script>
+
+	 //card search and display code ############
+	 function loadDoc() {
+	     
+	     var xhttp = new XMLHttpRequest();
+	     xhttp.onreadystatechange = function() {
+		 
+		 if (this.readyState == 4 && this.status == 200) {
+
+		     if(this.responseText.indexOf("No card matching your query was found in the database") == -1){
+			 
+			 var myObj = JSON.parse(this.responseText)[0];
+			 lastCard = myObj;
+
+			 //filter optional information
+			 var card_info = "";
+			 card_type = myObj.type;
+			 if(myObj.archetype){
+			     card_info += "<ul><li><a>Archetype: "+myObj.archetype+"</a></li></ul>";
+			 }
+			 if(myObj.type){
+			     if(card_type.indexOf("Spell") != -1 ){
+				 card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
+			     }else if(card_type.indexOf("Monster") != -1){
+				 card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
+				 if(card_type.indexOf("Link") != -1){
+				     link = 0;
+				     if(parseInt(myObj.level)){
+					 link_rating = myObj.level;
+				     }else{
+					 link_rating = myObj.linkval
+				     }
+				     card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>LINK Rating: "+link_rating+"</a></li></ul>";
+				 }else if(card_type.indexOf("XYZ") != -1){
+				     card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>DEF:  "+myObj.def+"</a></li><li><a>RANK:  "+myObj.level+"</a></li></ul>"
+				 }else{
+				     card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>DEF:  "+myObj.def+"</a></li><li><a>LVL:  "+myObj.level+"</a></li></ul>";
+				 }
+				 
+			     }else if(card_type.indexOf("Trap") != -1){
+				 card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
+			     }
+			     
+			 }
+			 
+
+			 
+			 img_txt = "<img src='https://ygoprodeck.com/pics/"+myObj.id + ".jpg'>";
+			 desc_txt= "<ul><li><a>"+myObj.name+"</a></li></ul>"+
+				   "<ul><li><a>"+myObj.desc+ "</a></li></ul>"+
+				   card_info;
+
+			 document.getElementById("card-img").innerHTML = img_txt;
+			 document.getElementById("card-desc").innerHTML = desc_txt;
+		     }else{
+			 document.getElementById("card-desc").innerHTML = "No card matching your query was found in the database";
+		     }
+		 }
+	     }
+	     xhttp.open("GET", "https://db.ygoprodeck.com/api/cardinfo.php?name="+document.getElementById("name").value, true);
+	     xhttp.send();
+	 }
+
+	 //autocomplete chache database code ############
+	 function autocompleteDb(){
+	     var xhttp = new XMLHttpRequest();
+	     xhttp.onreadystatechange = function() {
+		 if (this.readyState == 4 && this.status == 200) {
+		     
+		     var myBigObj = JSON.parse(this.responseText)[0];
+		     
+		     var y = document.createElement("DATALIST");
+		     y.setAttribute("id", "card-list");
+		     document.getElementById("myForm").appendChild(y);
+		     
+		     
+		     for (x in myBigObj){
+			 var z = document.createElement("OPTION");
+			 z.setAttribute("value", myBigObj[x].name);
+			 document.getElementById("card-list").appendChild(z);
+		     }
+		 }
+	     }
+	     xhttp.open("GET", "https://db.ygoprodeck.com/api/allcards.php", true);
+	     xhttp.send();
+	     document.getElementById("name").placeholder = "Database Updated!";
+	 }
+
+
+	 
+	 //deckbuilder code ############
+	 var cards = [];
+	 function refreshDeck(){
+	     var txt = "<ul>";
+	     for(i=0; i< cards.length; i++){
+		 txt = txt + "<p <li class = sCard>"+ cards[i].name+"</li></p>";
+	     }
+	     txt = txt + "</ul>";
+	     document.getElementById("list").innerHTML = txt;
+	     document.getElementById("msg").innerHTML = "";
+	     if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
+	 }
+	 function addCard(){
+	     
+	     if (!check60())
+	     {
+		 document.getElementById("msg").innerHTML = "you can't have more than 60 cards in your deck";
+	     }
+	     else if(!checkDuplicates())
+	     {
+		 document.getElementById("msg").innerHTML = "too many copies of a " + lastCard.ban_tcg + " card";
+
+	     }
+	     else{
+		 //   document.getElementById("msg").innerHTML = "";
+		 cards.push(lastCard);
+		 refreshDeck();
+		 //if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
+	     }
+	 }
+	 function removeLastCard(){
+	     cards.pop();
+	     refreshDeck();
+	     //document.getElementById("msg").innerHTML = "";
+
+	 }
+	 function removeNumber(n)
+	 {
+	     cards.splice(n,1);
+	     refreshDeck();
+	     //document.getElementById("msg").innerHTML = "";
+	     //if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
+	 }
+	 function checkDuplicates(){ //checks if there are 3 copies of a card already
+	     var count = 0;
+	     var limit = 0;
+	     
+	     if (lastCard.ban_tcg == "Limited") limit = 1;
+	     else if (lastCard.ban_tcg == "Semi-Limited") limit = 2;
+	     else if (lastCard.ban_tcg == "Banned") limit = 0;
+	     else limit = 3;
+	     for(i = 0; i< cards.length; i++){
+		 if (cards[i].name == lastCard.name) count ++;
+	     }
+	     if (count < limit) return true;
+	     else return false;
+	 }
+	 function check60(){
+	     if (cards.length >= 60) return false;
+	     else return true;
+	 }
+	 //event handler with jquery
+	 //$(document).ready(function(){
+		 $("#list").on("click", ".sCard", function(e){
+
+			 //qui ci va la funzione per il display della carta
+			 var testo = $(this).text();
+			 $('#name').val(testo);
+			 loadDoc();
+		 });
+	 //});
+				
+	 
+	</script>
+
+    </body>
+</html>
