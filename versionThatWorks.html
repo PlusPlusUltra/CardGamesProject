@@ -75,6 +75,9 @@
 	<script>
 
 	 //card search and display code ############
+
+
+	 //search code, call this only when mandatory
 	 function loadDoc() {
 	     
 	     var xhttp = new XMLHttpRequest();
@@ -83,50 +86,9 @@
 		 if (this.readyState == 4 && this.status == 200) {
 
 		     if(this.responseText.indexOf("No card matching your query was found in the database") == -1){
-			 
 			 var myObj = JSON.parse(this.responseText)[0];
 			 lastCard = myObj;
-
-			 //filter optional information
-			 var card_info = "";
-			 card_type = myObj.type;
-			 if(myObj.archetype){
-			     card_info += "<ul><li><a>Archetype: "+myObj.archetype+"</a></li></ul>";
-			 }
-			 if(myObj.type){
-			     if(card_type.indexOf("Spell") != -1 ){
-				 card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
-			     }else if(card_type.indexOf("Monster") != -1){
-				 card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
-				 if(card_type.indexOf("Link") != -1){
-				     link = 0;
-				     if(parseInt(myObj.level)){
-					 link_rating = myObj.level;
-				     }else{
-					 link_rating = myObj.linkval
-				     }
-				     card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>LINK Rating: "+link_rating+"</a></li></ul>";
-				 }else if(card_type.indexOf("XYZ") != -1){
-				     card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>DEF:  "+myObj.def+"</a></li><li><a>RANK:  "+myObj.level+"</a></li></ul>"
-				 }else{
-				     card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>DEF:  "+myObj.def+"</a></li><li><a>LVL:  "+myObj.level+"</a></li></ul>";
-				 }
-				 
-			     }else if(card_type.indexOf("Trap") != -1){
-				 card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
-			     }
-			     
-			 }
-			 
-
-			 
-			 img_txt = "<img src='https://ygoprodeck.com/pics/"+myObj.id + ".jpg'>";
-			 desc_txt= "<ul><li><a>"+myObj.name+"</a></li></ul>"+
-				   "<ul><li><a>"+myObj.desc+ "</a></li></ul>"+
-				   card_info;
-
-			 document.getElementById("card-img").innerHTML = img_txt;
-			 document.getElementById("card-desc").innerHTML = desc_txt;
+			 displayCard(myObj);
 		     }else{
 			 document.getElementById("card-desc").innerHTML = "No card matching your query was found in the database";
 		     }
@@ -135,6 +97,60 @@
 	     xhttp.open("GET", "https://db.ygoprodeck.com/api/cardinfo.php?name="+document.getElementById("name").value, true);
 	     xhttp.send();
 	 }
+
+	 
+	 //card display function
+	 function displayCard(current_card){
+	     myObj = current_card;
+
+	     //filter optional information
+	     var card_info = "";
+	     card_type = myObj.type;
+	     if(myObj.archetype){
+		 card_info += "<ul><li><a>Archetype: "+myObj.archetype+"</a></li></ul>";
+	     }
+	     if(myObj.type){
+		 if(card_type.indexOf("Spell") != -1 ){
+		     card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
+		 }else if(card_type.indexOf("Monster") != -1){
+		     card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
+		     if(card_type.indexOf("Link") != -1){
+			 link = 0;
+			 if(parseInt(myObj.level)){
+			     link_rating = myObj.level;
+			 }else{
+			     link_rating = myObj.linkval
+			 }
+			 card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>LINK Rating: "+link_rating+"</a></li></ul>";
+		     }else if(card_type.indexOf("XYZ") != -1){
+			 card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>DEF:  "+myObj.def+"</a></li><li><a>RANK:  "+myObj.level+"</a></li></ul>"
+		     }else{
+			 card_info += "<ul><li><a>ATK: "+myObj.atk+"</a></li><li><a>DEF:  "+myObj.def+"</a></li><li><a>LVL:  "+myObj.level+"</a></li></ul>";
+		     }
+		     
+		 }else if(card_type.indexOf("Trap") != -1){
+		     card_info += "<ul><li><a>"+myObj.race+" "+myObj.type+"</a></li></ul>";
+		 }
+		 
+	     }
+	     
+
+	     
+	     img_txt = "<img src='https://ygoprodeck.com/pics/"+myObj.id + ".jpg'>";
+	     desc_txt= "<ul><li><a>"+myObj.name+"</a></li></ul>"+
+		       "<ul><li><a>"+myObj.desc+ "</a></li></ul>"+
+		       card_info;
+
+	     document.getElementById("card-img").innerHTML = img_txt;
+	     document.getElementById("card-desc").innerHTML = desc_txt;
+	     
+	 }
+
+
+
+
+
+	 
 
 	 //autocomplete chache database code ############
 	 function autocompleteDb(){
@@ -226,15 +242,15 @@
 	 }
 	 //event handler with jquery
 	 //$(document).ready(function(){
-		 $("#list").on("click", ".sCard", function(e){
+	 $("#list").on("click", ".sCard", function(e){
 
-			 //qui ci va la funzione per il display della carta
-			 var testo = $(this).text();
-			 $('#name').val(testo);
-			 loadDoc();
-		 });
+	     //qui ci va la funzione per il display della carta
+	     var testo = $(this).text();
+	     $('#name').val(testo);
+	     loadDoc();
+	 });
 	 //});
-				
+	 
 	 
 	</script>
 
