@@ -10,7 +10,7 @@
      }
 
      ul.circle{
-	 list-style-type: circle;
+		background-color: white;
      }
 
 
@@ -24,6 +24,7 @@
      }
      li.dotted{
 	 display:block;
+	 color:black;
      }
 
      li a {
@@ -81,7 +82,7 @@
 	<div class="w3-row-padding w3-padding-64 w3-container">
 	    <div class="w3-content-card">
 		<div class="w3-center">
-		    <p id="list" class="welc-msg">deck</p>
+		    <p id="list" class="welc-msg"></p>
 		</div>
 
 	    </div>
@@ -352,11 +353,15 @@
 		  '<li class = "dotted"><p>update the db if you don\'t find a specific card</p></li>'+
 		  '<li class = "dotted"><p>Use export to copy your deck to clipboard</p></li>'+
 		  "</ul></p>";
-
-
-	     
+		  inizialized = true;
 	     document.getElementById("list").innerHTML = txt;
 	     $(".welc-msg").show(1000);
+	     $("#name").click(function(){
+				if(inizialized){
+						inizialized = false;
+						document.getElementById("list").innerHTML = "";
+					}
+			 });
 	     
 	     $("#list").on("click", ".sCard", function(e){
 
