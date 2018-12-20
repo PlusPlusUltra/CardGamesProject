@@ -50,6 +50,8 @@
 			<button type = "button" class="w3-bar-item w3-button w3-hover-brown"  onclick="loadDbfromApi()">update local DB</button>
 			<button type = "button" class="w3-bar-item w3-button w3-hover-brown"  onclick="addCard()">Add to deck</button>
 			<button type = "button" class="w3-bar-item w3-button w3-hover-brown"  onclick="removeLastCard()">Remove last</button>
+			<button type = "button" class="w3-bar-item w3-button w3-hover-brown"  onclick="recoverSession()">Recover session</button>
+			<button type = "button" class="w3-bar-item w3-button w3-hover-brown"  onclick="exportCopy()">Export Deck</button>
 			
 		    </div>
 		</div>
@@ -164,8 +166,8 @@
 		       card_info;
 	     document.getElementById("card-img").innerHTML = img_txt;
 	     document.getElementById("card-desc").innerHTML = desc_txt;
-	     var card_json = { name : myObj.name, image : img_txt, card : myObj};
-	     localStorage.LastCardString = JSON.stringify(card_json);
+	     //var card_json = { name : myObj.name, image : img_txt, card : myObj}; //buttare
+	     localStorage.LastCardString = JSON.stringify(myObj); //myObj al posto di card_json
 	     document.getElementById("msg").innerHTML = "card loaded";
 	     
 	 }
@@ -247,6 +249,7 @@
 	     document.getElementById("list").innerHTML = txt;
 	     document.getElementById("msg").innerHTML = "";
 	     if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
+	     
 	 }
 	 
 	 function addCard(){
@@ -267,15 +270,14 @@
 	     else{
 		 //document.getElementById("msg").innerHTML = "";
 		 cards.push(lastCard);
-		 //current_deck = JSON.parse(localStorage.Deck);
-		 //localStorage.Deck = JSON.stringify(current_deck.push(lastCard));
-		 
+		 localStorage.Deck = JSON.stringify(cards);
 		 refreshDeck();
 		 //if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
 	     }
 	 }
 	 function removeLastCard(){
 	     cards.pop();
+	     localStorage.Deck = JSON.stringify(cards);
 	     refreshDeck();
 	     //document.getElementById("msg").innerHTML = "";
 
@@ -307,7 +309,19 @@
 	 }
 	 //###
 	 
-	 
+	 //session recovery button
+	 function recoverSession(){
+
+		 cards = JSON.parse(localStorage.Deck);
+		 refreshDeck();
+	 }
+	 function exportCopy(){
+		 var toCopy = ""
+		 for (i = 0; i< cards.length; i++){
+			 toCopy = toCopy + cards[i].name + "\n";
+		 }
+		 navigator.clipboard.writeText(toCopy);
+	 }
 	 //event handler with jquery ###
 
 	 $(document).ready(function(){
@@ -316,15 +330,19 @@
 	     loadautocompleteDb();
 
 	     if(localStorage.Deck== null){
-		 localStorage.Deck = "[]"; 
+		 localStorage.Deck = ""; 
 	     }
 	     
 	     $("#list").on("click", ".sCard", function(e){
 
 		 //qui ci va la funzione per il display della carta
 		 var testo = $(this).text();
-		 $('#name').val(testo);
-		 loadDoc();
+		 var cardN = 0;
+		 for (i = 0; i< cards.length; i++) {
+			 if( cards[i].name == testo) cardN = i;
+		 }
+		 displayCard(cards[cardN]);
+		 
 	     });
 	     
 	     $(window).unload(function(){
