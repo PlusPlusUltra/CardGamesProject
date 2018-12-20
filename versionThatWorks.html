@@ -9,11 +9,20 @@
 	 overflow: hidden;
      }
 
+     ul.circle{
+	 list-style-type: circle;
+     }
+
+
      li {
 	 display:inline-block;
          color:white;
      }
+     
      li.vertical{
+	 display:block;
+     }
+     li.dotted{
 	 display:block;
      }
 
@@ -40,8 +49,7 @@
 	<!-- top seach bar  -->
 	<div class="w3-top">
 	    <div class="w3-bar w3-orange w3-left-align">
-		<a class="w3-bar-item w3-button w3-hover-brown" href="card-search-w3style.html">Card Search</a>
-		<a class="w3-bar-item w3-button w3-hover-brown" href="sampleBuilder.html">Deck Builder</a>
+		<a class="w3-bar-item w3-button w3-hover-brown" onclick="clearCardStorage()">Clear Storage</a>
 		<input class="ui-autocomplete-input" list="card-list" autocomplete="off" type="text" id="name" onclick="this.select()" placeholder="Input a card name" onKeyDown="if(event.keyCode==13) loadDoc();">
 		<a id= "msg"></a>
 		<div class="w3-dropdown-hover w3-right">
@@ -63,17 +71,17 @@
 	<div class="w3-row-padding w3-padding-64 w3-container">
 	    <div class="w3-content-card">
 		<div class="w3-half w3-center">
-		    <div id="card-img">card image</div>
+		    <div id="card-img"></div>
 		</div>
 		<div class="w3-half w3-center">
-		    <div id="card-desc">card description tab </div>
+		    <div id="card-desc"></div>
 		</div>
 	    </div>
 	</div>
 	<div class="w3-row-padding w3-padding-64 w3-container">
 	    <div class="w3-content-card">
-		<div class="w3-third w3-center">
-		    <p id="list">deck</p>
+		<div class="w3-center">
+		    <p id="list" class="welc-msg">deck</p>
 		</div>
 
 	    </div>
@@ -96,9 +104,9 @@
 			 var myObj = JSON.parse(this.responseText)[0];
 			 lastCard = myObj;
 			 displayCard(myObj);
-			 localStoreage.LastCardString = JSON.stringify(myObj);
+			 localStorage.LastCardString = JSON.stringify(myObj);
 		     }else{
-			 document.getElementById("card-desc").innerHTML = "No card matching your query was found in the database";
+			 document.getElementById("msg").innerHTML = "No card matching";
 		     }
 		 }
 	     }
@@ -166,9 +174,7 @@
 		       card_info;
 	     document.getElementById("card-img").innerHTML = img_txt;
 	     document.getElementById("card-desc").innerHTML = desc_txt;
-	     //var card_json = { name : myObj.name, image : img_txt, card : myObj}; //buttare
-	     localStorage.LastCardString = JSON.stringify(myObj); //myObj al posto di card_json
-	     document.getElementById("msg").innerHTML = "card loaded";
+	     localStorage.LastCardString = JSON.stringify(myObj);
 	     
 	 }
 	 
@@ -205,6 +211,7 @@
 		 z.setAttribute("value", db_obj[x].name);
 		 document.getElementById("card-list").appendChild(z);
 	     }
+
 	 }
 	 //#
 	 
@@ -221,9 +228,7 @@
 	 //the autocomplete list accordingly #
 	 function loadautocompleteDb(){
 	     if (typeof(Storage) !== "undefined") {
-		 document.getElementById("msg").innerHTML = localStorage.Dbloaded +"1loading from where?";
 		 if (localStorage.Dbloaded) {
-		     document.getElementById("msg").innerHTML = "loading from local!";
 		     loadDbfromLocal();
 		 } else {
 		     loadDbfromApi();
@@ -231,7 +236,6 @@
 	     } else {
 		 document.getElementById("msg").innerHTML = "Sorry, your browser does not support web storage...";
 	     }
-	     
 	 }
 	 //#
 	 
@@ -254,7 +258,7 @@
 	 
 	 function addCard(){
 
-	     //lastCard = JSON.parse(localStorage.LastCardString).card;
+	     lastCard = JSON.parse(localStorage.LastCardString);
 	     
 	     if (!check60())
 	     {
@@ -311,17 +315,25 @@
 	 
 	 //session recovery button
 	 function recoverSession(){
-
-		 cards = JSON.parse(localStorage.Deck);
-		 refreshDeck();
+	     
+	     current_card = JSON.parse(localStorage.LastCardString);
+	     displayCard(current_card);
+	     cards = JSON.parse(localStorage.Deck);
+	     refreshDeck();
 	 }
 	 function exportCopy(){
-		 var toCopy = ""
-		 for (i = 0; i< cards.length; i++){
-			 toCopy = toCopy + cards[i].name + "\n";
-		 }
-		 navigator.clipboard.writeText(toCopy);
+	     var toCopy = ""
+	     for (i = 0; i< cards.length; i++){
+		 toCopy = toCopy + cards[i].name + "\n";
+	     }
+	     navigator.clipboard.writeText(toCopy);
 	 }
+	 function clearCardStorage(){
+	     localStorage.Deck = "";
+	     localStorage.LastCardString = "";
+	 }
+
+	 
 	 //event handler with jquery ###
 
 	 $(document).ready(function(){
@@ -332,6 +344,19 @@
 	     if(localStorage.Deck== null){
 		 localStorage.Deck = ""; 
 	     }
+	     $(".welc-msg").hide();
+	     txt ="<p><h>Welcome to the DeckBuilder!</h></p>"+
+		  '<p>here you have a list o fo options available<ul class="circle">'+
+		  '<li class = "dotted"><p>Use the input box to search for a card</p></li>'+
+		  '<li class = "dotted"><p>you can find the list of operations in card OPS</p></li>'+
+		  '<li class = "dotted"><p>update the db if you don\'t find a specific card</p></li>'+
+		  '<li class = "dotted"><p>Use export to copy your deck to clipboard</p></li>'+
+		  "</ul></p>";
+
+
+	     
+	     document.getElementById("list").innerHTML = txt;
+	     $(".welc-msg").show(1000);
 	     
 	     $("#list").on("click", ".sCard", function(e){
 
@@ -339,7 +364,7 @@
 		 var testo = $(this).text();
 		 var cardN = 0;
 		 for (i = 0; i< cards.length; i++) {
-			 if( cards[i].name == testo) cardN = i;
+		     if( cards[i].name == testo) cardN = i;
 		 }
 		 displayCard(cards[cardN]);
 		 
@@ -353,4 +378,5 @@
 	</script>
 
     </body>
+
 </html>
