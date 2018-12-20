@@ -273,28 +273,24 @@
 
 	     }
 	     else{
-		 //document.getElementById("msg").innerHTML = "";
 		 cards.push(lastCard);
 		 localStorage.Deck = JSON.stringify(cards);
 		 refreshDeck();
-		 //if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
 	     }
 	 }
 	 function removeLastCard(){
 	     cards.pop();
 	     localStorage.Deck = JSON.stringify(cards);
 	     refreshDeck();
-	     //document.getElementById("msg").innerHTML = "";
 
 	 }
 	 function removeNumber(n)
 	 {
 	     cards.splice(n,1);
 	     refreshDeck();
-	     //document.getElementById("msg").innerHTML = "";
-	     //if (cards.length >= 40) document.getElementById("msg").innerHTML = "your deck is ready, time to d-d-d-d-d-d-d-d-d-d-d--d-d-duel";
+	     
 	 }
-	 function checkDuplicates(){ //checks if there are 3 copies of a card already
+	 function checkDuplicates(){ //checks if there are 3 too many copies of a card already
 	     var count = 0;
 	     var limit = 0;
 	     
@@ -347,7 +343,7 @@
 	     }
 	     $(".welc-msg").hide();
 	     txt ="<p><h>Welcome to the DeckBuilder!</h></p>"+
-		  '<p>here you have a list o fo options available<ul class="circle">'+
+		  '<p>here you have a list of options available<ul class="circle">'+
 		  '<li class = "dotted"><p>Use the input box to search for a card</p></li>'+
 		  '<li class = "dotted"><p>you can find the list of operations in card OPS</p></li>'+
 		  '<li class = "dotted"><p>update the db if you don\'t find a specific card</p></li>'+
@@ -365,7 +361,7 @@
 	     
 	     $("#list").on("click", ".sCard", function(e){
 
-		 //qui ci va la funzione per il display della carta
+		 //shows the clicked card
 		 var testo = $(this).text();
 		 var cardN = 0;
 		 for (i = 0; i< cards.length; i++) {
